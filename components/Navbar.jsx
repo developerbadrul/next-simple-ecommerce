@@ -1,7 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const Navbar = () => {
+import { auth } from "@/auth";
+import Logout from "./Logout";
+const Navbar = async () => {
+    const session = await auth()
+    // console.log(session);
     return (
         <nav className="bg-gray-800">
             <div className="container flex">
@@ -53,7 +56,18 @@ const Navbar = () => {
                         <Link href="/" className="text-gray-200 hover:text-white transition">Contact us</Link>
 
                     </div>
-                    <Link href="/login" className="text-gray-200 hover:text-white transition">Login</Link>
+                    {
+                        session?.user ? (
+                            <div className="text-gray-200 hover:text-white transition">
+                                <span className="mx-1"> {session?.user?.name} </span>
+                                <span> | </span>
+                                <Logout />
+                            </div>
+                        ) : (
+                            <Link href="/login" className="text-gray-200 hover:text-white transition">Login</Link>
+                        )
+                    }
+
                 </div>
             </div>
         </nav>
